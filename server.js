@@ -8,11 +8,23 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// 🔥 حَلّ مشكلة الـ Loading والمسارات الفرعية بشكل قطعي وعنيف
+app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'style.css')));
+app.get('/app.js', (req, res) => res.sendFile(path.join(__dirname, 'app.js')));
+app.get('/i18n.js', (req, res) => res.sendFile(path.join(__dirname, 'i18n.js')));
+app.get('/words.js', (req, res) => res.sendFile(path.join(__dirname, 'words.js')));
+
+// تخديم الملفات العامة احتياطاً
 app.use(express.static(__dirname));
 
-// Any /room/XXXXXX link serves the same app; the client reads the code from the URL.
+// أي رابط للغرفة يخدم نفس ملف الـ HTML الرئيسي لتقرأ منه الأكواد
 app.get('/room/:code', (req, res) => {
- res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// الرابط الرئيسي للموقع
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ---------------------------------------------------------------
