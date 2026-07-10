@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" id="htmlRoot">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>CODE BERLINZ</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CODE BERLINZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<!-- ============ LOADING SCREEN ============ -->
 <div id="loadingScreen" class="screen loading-screen">
   <div class="loading-inner">
     <div class="cb-logo">
@@ -24,7 +24,6 @@
   </div>
 </div>
 
-<!-- ============ MAIN MENU ============ -->
 <div id="menuScreen" class="screen menu-screen hidden">
   <button class="gear-btn" id="gearBtn" title="Settings" aria-label="Settings">⚙</button>
   <div class="menu-card">
@@ -41,7 +40,6 @@
   </div>
 </div>
 
-<!-- ============ NAME / JOIN MODAL ============ -->
 <div id="entryOverlay" class="overlay">
   <div class="modal">
     <h2 id="entryTitle" data-i18n="createRoom">Create Room</h2>
@@ -61,7 +59,6 @@
   </div>
 </div>
 
-<!-- ============ LOBBY ============ -->
 <div id="lobbyScreen" class="screen hidden">
   <button class="gear-btn" id="gearBtnLobby" title="Settings" aria-label="Settings">⚙</button>
   <div class="lobby-wrap">
@@ -105,7 +102,6 @@
   </div>
 </div>
 
-<!-- ============ GAME SCREEN ============ -->
 <div id="gameScreen" class="screen hidden">
   <header class="game-header">
     <div class="brand-mini">
@@ -163,7 +159,6 @@
   </div>
 </div>
 
-<!-- ============ END GAME MODAL ============ -->
 <div class="overlay" id="endOverlay">
   <div class="modal">
     <h2 id="endTitle" data-i18n="gameOverTitle">Mission Complete</h2>
@@ -175,7 +170,6 @@
   </div>
 </div>
 
-<!-- ============ SETTINGS / LANGUAGE MODAL ============ -->
 <div class="overlay" id="settingsOverlay">
   <div class="modal">
     <h2 data-i18n="settings">Settings</h2>
@@ -191,8 +185,8 @@
 
 <div id="toast" class="toast hidden"></div>
 
-<script src="socket.io/socket.io.js"></script>
-<script src="i18n.js"></script>
-<script src="app.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/i18n.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>
