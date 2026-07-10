@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CODE BERLINZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOADING SCREEN ============ -->
+<div id="loadingScreen" class="screen loading-screen">
+  <div class="loading-inner">
+    <div class="cb-logo">
+      <div class="cb-ring"></div>
+      <div class="cb-ring cb-ring2"></div>
+      <span>CB</span>
+    </div>
+    <h1 class="loading-title">CODE <span>BERLINZ</span></h1>
+    <div class="loading-bar"><div class="loading-bar-fill" id="loadingFill"></div></div>
+    <div class="loading-msg" id="loadingMsg">Loading…</div>
+  </div>
+</div>
+
+<!-- ============ MAIN MENU ============ -->
+<div id="menuScreen" class="screen menu-screen hidden">
+  <button class="gear-btn" id="gearBtn" title="Settings" aria-label="Settings">⚙</button>
+  <div class="menu-card">
+    <div class="cb-logo small">
+      <div class="cb-ring"></div>
+      <span>CB</span>
+    </div>
+    <h1 class="menu-title">CODE <span>BERLINZ</span></h1>
+    <p class="menu-tagline" data-i18n="tagline">A 2v2 secret-word mission game</p>
+    <div class="menu-actions">
+      <button class="btn btn-gold btn-lg" id="btnCreate" data-i18n="createRoom">Create Room</button>
+      <button class="btn btn-ghost btn-lg" id="btnJoin" data-i18n="joinRoom">Join Room</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NAME / JOIN MODAL ============ -->
+<div id="entryOverlay" class="overlay">
+  <div class="modal">
+    <h2 id="entryTitle" data-i18n="createRoom">Create Room</h2>
+    <div class="field">
+      <label data-i18n="yourName">Your codename</label>
+      <input type="text" id="nameInput" maxlength="20" data-i18n-ph="namePlaceholder" placeholder="Enter your name">
+    </div>
+    <div class="field hidden" id="codeField">
+      <label data-i18n="roomCode">Room code</label>
+      <input type="text" id="codeInput" maxlength="6" style="text-transform:uppercase" data-i18n-ph="enterCode" placeholder="Enter room code">
+    </div>
+    <div id="entryError" class="entry-error hidden"></div>
+    <div class="row">
+      <button class="btn btn-ghost" id="entryBack" data-i18n="back">Back</button>
+      <button class="btn btn-gold" id="entryGo" data-i18n="join">Join</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LOBBY ============ -->
+<div id="lobbyScreen" class="screen hidden">
+  <button class="gear-btn" id="gearBtnLobby" title="Settings" aria-label="Settings">⚙</button>
+  <div class="lobby-wrap">
+    <h2 class="lobby-title" data-i18n="lobbyTitle">Mission Lobby</h2>
+    <div class="share-box">
+      <span data-i18n="shareTitle">Share this link with 3 friends</span>
+      <div class="share-row">
+        <input type="text" id="shareLinkInput" readonly>
+        <button class="btn btn-gold btn-sm" id="copyLinkBtn" data-i18n="copyLink">Copy link</button>
+      </div>
+    </div>
+    <p class="lobby-hint" data-i18n="tapToJoin">Tap a seat to join it</p>
+
+    <div class="teams-grid">
+      <div class="team-col red">
+        <h3 data-i18n="redTeam">Red Team</h3>
+        <div class="seat" data-slot="red-spymaster">
+          <div class="seat-role" data-i18n="spymaster">Spymaster</div>
+          <div class="seat-name" data-empty-i18n="empty">Empty</div>
+        </div>
+        <div class="seat" data-slot="red-operative">
+          <div class="seat-role" data-i18n="operative">Operative</div>
+          <div class="seat-name" data-empty-i18n="empty">Empty</div>
+        </div>
+      </div>
+      <div class="team-col blue">
+        <h3 data-i18n="blueTeam">Blue Team</h3>
+        <div class="seat" data-slot="blue-spymaster">
+          <div class="seat-role" data-i18n="spymaster">Spymaster</div>
+          <div class="seat-name" data-empty-i18n="empty">Empty</div>
+        </div>
+        <div class="seat" data-slot="blue-operative">
+          <div class="seat-role" data-i18n="operative">Operative</div>
+          <div class="seat-name" data-empty-i18n="empty">Empty</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-gold btn-lg" id="startGameBtn" data-i18n="startGame" disabled>Start Game</button>
+    <p class="lobby-waiting" id="lobbyWaitingMsg" data-i18n="needAllSlots">Waiting for all 4 seats to fill…</p>
+  </div>
+</div>
+
+<!-- ============ GAME SCREEN ============ -->
+<div id="gameScreen" class="screen hidden">
+  <header class="game-header">
+    <div class="brand-mini">
+      <span class="cb-mini">CB</span>
+      <span class="brand-mini-text">CODE <b>BERLINZ</b></span>
+    </div>
+    <button class="gear-btn" id="gearBtnGame" title="Settings" aria-label="Settings">⚙</button>
+  </header>
+
+  <div class="status-bar">
+    <div class="team-card red" id="redCard">
+      <div class="team-label"><span data-i18n="redTeam">Red Team</span><span class="turn-pill" data-i18n="yourTurn">Turn</span></div>
+      <div class="team-count"><span id="redCount">9</span><small data-i18n="remaining">left</small></div>
+    </div>
+    <div class="center-panel">
+      <div class="clue-label" data-i18n="currentClue">Current clue</div>
+      <div class="clue-word" id="clueWordDisp">—</div>
+      <div class="clue-num" id="clueNumDisp" data-i18n="noClueYet">Waiting for clue…</div>
+    </div>
+    <div class="team-card blue" id="blueCard">
+      <div class="team-label"><span data-i18n="blueTeam">Blue Team</span><span class="turn-pill" data-i18n="yourTurn">Turn</span></div>
+      <div class="team-count"><span id="blueCount">8</span><small data-i18n="remaining">left</small></div>
+    </div>
+  </div>
+
+  <div class="board-area">
+    <div class="board" id="board"></div>
+    <div class="side-panel">
+      <h3 data-i18n="gameLog">Mission Log</h3>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+  <div class="controls" id="controlsBar">
+    <div class="my-role-msg" id="myRoleMsg"></div>
+
+    <div class="clue-form hidden" id="clueForm">
+      <div class="field">
+        <label data-i18n="clueLabel">One-word clue</label>
+        <input type="text" id="clueInput" maxlength="30">
+      </div>
+      <div class="field">
+        <label data-i18n="numberLabel">Number</label>
+        <select id="clueNumSelect">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="0" data-i18n-opt="unlimitedOpt">∞ Unlimited</option>
+        </select>
+      </div>
+      <button class="btn btn-gold" id="submitClueBtn" data-i18n="submitClue">Send Clue</button>
+    </div>
+
+    <button class="btn btn-end hidden" id="endTurnBtn" data-i18n="endTurn">End Turn</button>
+  </div>
+</div>
+
+<!-- ============ END GAME MODAL ============ -->
+<div class="overlay" id="endOverlay">
+  <div class="modal">
+    <h2 id="endTitle" data-i18n="gameOverTitle">Mission Complete</h2>
+    <p id="endText"></p>
+    <div class="row">
+      <button class="btn btn-gold" id="playAgainBtn" data-i18n="playAgain">New Game</button>
+      <button class="btn btn-ghost" id="backMenuBtn" data-i18n="backToMenu">Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SETTINGS / LANGUAGE MODAL ============ -->
+<div class="overlay" id="settingsOverlay">
+  <div class="modal">
+    <h2 data-i18n="settings">Settings</h2>
+    <div class="field">
+      <label data-i18n="language">Language</label>
+      <select id="langSelect"></select>
+    </div>
+    <div class="row">
+      <button class="btn btn-gold" id="closeSettingsBtn" data-i18n="close">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

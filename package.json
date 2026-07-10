@@ -1,0 +1,16 @@
+{
+  "name": "code-berlinz",
+  "version": "1.0.0",
+  "description": "CODE BERLINZ - real-time 2v2 Codenames-style word game with shareable room links",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
