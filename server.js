@@ -6,9 +6,16 @@ const { AR_WORDS, EN_WORDS } = require('./words');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
-// 🔥 حَلّ مشكلة الـ Loading والمسارات الفرعية بشكل قطعي وعنيف
+// 🛠️ تفعيل مكتبة الـ Sockets وتثبيت مسار الـ Path الرئيسي لها
+const io = new Server(server, {
+  path: '/socket.io'
+});
+
+// 🔥 تخديم الملفات الأساسية والمكتبات بشكل مباشر وقاطع لمنع أي تداخل مع المسارات الفرعية
+app.get('/socket.io/socket.io.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'node_modules/socket.io/client-dist/socket.io.js'));
+});
 app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'style.css')));
 app.get('/app.js', (req, res) => res.sendFile(path.join(__dirname, 'app.js')));
 app.get('/i18n.js', (req, res) => res.sendFile(path.join(__dirname, 'i18n.js')));
