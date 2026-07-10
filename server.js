@@ -8,11 +8,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '.')));
 
 // Any /room/XXXXXX link serves the same app; the client reads the code from the URL.
 app.get('/room/:code', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+ res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ---------------------------------------------------------------
