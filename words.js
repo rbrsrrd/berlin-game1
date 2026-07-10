@@ -27,7 +27,8 @@ const AR_WORDS = [
 "ضباب","صقيع","إعصار","زلزال","تسونامي","فيضان","جفاف","حريق غابات",
 "نرد","دومينو","ورق لعب","كلمات متقاطعة","لغز","متاهة",
 "عيد","مهرجان","كرنفال","حفل زفاف","عيد ميلاد",
-"مغامرة","رحلة","سفر","اكتشاف","اختراع","معجزة","سر","خطة","خدعة","مفاجأة","تحدي","فرصة","نجاح","فشل","جائزة","ميدالية","كأس","بطولة"
+"مغامرة","رحلة","سفر","اكتشاف","اختراع","معجزة","سر","خطة","خدعة","مفاجأة","تحدي","فرصة","نجاح","فشل","جائزة","ميدالية","كأس","بطولة",
+"تشفير","جدار حمايه","هكر","فايروس","ثغرة","بصمة","لوحة تحكم","سيرفر","قاعدة بيانات","مفتاح سري","عميل سري","رمز النجمه","مهمة","بروتوكول","شبكة","الرقم الرقمي"
 ];
 
 const EN_WORDS = [
@@ -55,7 +56,8 @@ const EN_WORDS = [
 "Fog","Frost","Hurricane","Earthquake","Tsunami","Flood","Drought","Wildfire",
 "Dice","Domino","Cards","Crossword","Puzzle","Maze",
 "Holiday","Festival","Carnival","Wedding","Birthday",
-"Adventure","Journey","Trip","Discovery","Invention","Miracle","Secret","Plan","Trick","Surprise","Challenge","Opportunity","Success","Failure","Prize","Medal","Trophy","Championship"
+"Adventure","Journey","Trip","Discovery","Invention","Miracle","Secret","Plan","Trick","Surprise","Challenge","Opportunity","Success","Failure","Prize","Medal","Trophy","Championship",
+"Encryption","Firewall","Hacker","Virus","Vulnerability","Fingerprint","Dashboard","Server","Database","Secret Key","Secret Agent","Star Code","Mission","Protocol","Network","Digital Number"
 ];
 
 module.exports = { AR_WORDS, EN_WORDS };
