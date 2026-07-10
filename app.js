@@ -162,7 +162,7 @@ document.getElementById('langSelect').addEventListener('change', (e)=>{
   lang = e.target.value;
   localStorage.setItem('cb_lang', lang);
   applyTranslations();
-  if(lastState && lastState.phase === 'lobby'){
+  if(lastState){
     socket.emit('setLang', { lang });
   }
 });
@@ -241,6 +241,36 @@ function renderGame(state){
   document.getElementById('redCard').classList.toggle('active', state.currentTeam==='red' && state.phase==='playing');
   document.getElementById('blueCard').classList.toggle('active', state.currentTeam==='blue' && state.phase==='playing');
 
+  // ✨ نظام إظهار اللاعبين المسجلين وأدوارهم بجانب كل فريق داخل الجيم
+  let redRoster = document.getElementById('redRosterInGame');
+  if(!redRoster) {
+    redRoster = document.createElement('div');
+    redRoster.id = 'redRosterInGame';
+    redRoster.style.cssText = "margin-top: 8px; font-size: 11px; text-align: center; opacity: 0.85; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 4px;";
+    document.getElementById('redCard').appendChild(redRoster);
+  }
+  redRoster.innerHTML = '';
+
+  let blueRoster = document.getElementById('blueRosterInGame');
+  if(!blueRoster) {
+    blueRoster = document.createElement('div');
+    blueRoster.id = 'blueRosterInGame';
+    blueRoster.style.cssText = "margin-top: 8px; font-size: 11px; text-align: center; opacity: 0.85; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 4px;";
+    document.getElementById('blueCard').appendChild(blueRoster);
+  }
+  blueRoster.innerHTML = '';
+
+  state.players.forEach(p => {
+    if(!p.slot) return;
+    const isRed = p.slot.startsWith('red');
+    const roleKey = p.slot.endsWith('spymaster') ? 'spymaster' : 'operative';
+    const tag = document.createElement('div');
+    tag.style.margin = '2px 0';
+    tag.textContent = `${p.name} (${t(roleKey)})`;
+    if(isRed) redRoster.appendChild(tag);
+    else blueRoster.appendChild(tag);
+  });
+
   document.getElementById('clueWordDisp').textContent = state.clue ? state.clue.word : '—';
   document.getElementById('clueNumDisp').textContent = state.clue
     ? (state.clue.number===0 ? t('unlimitedShort') : `${t('numberLabel')}: ${state.clue.number}`)
@@ -267,7 +297,8 @@ function renderGame(state){
 
     const wordSpan = document.createElement('span');
     wordSpan.className = 'word';
-    wordSpan.textContent = cell.word;
+    // ✨ التحويل الديناميكي للغة الكلمات بالكامل فور تغيير اللغة
+    wordSpan.textContent = lang === 'ar' ? cell.wordAr : cell.wordEn;
     div.appendChild(wordSpan);
 
     div.addEventListener('click', ()=>{
