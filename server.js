@@ -60,20 +60,24 @@ function shuffle(arr) {
   return a;
 }
 
-function wordsFor(lang) {
-  return lang === 'ar' ? AR_WORDS : EN_WORDS;
-}
-
-function newBoard(lang, startTeam) {
-  const pool = wordsFor(lang);
-  const words = shuffle(pool).slice(0, 25);
+function newBoard(startTeam) {
+  // توليد مصفوفة تعتمد على الفهرس لدعم الترجمة الفورية للكلمة أثناء اللعب
+  const indices = Array.from({ length: AR_WORDS.length }, (_, i) => i);
+  const chosenIndices = shuffle(indices).slice(0, 25);
+  
   const colors = [];
   for (let i = 0; i < (startTeam === 'red' ? 9 : 8); i++) colors.push('red');
   for (let i = 0; i < (startTeam === 'blue' ? 9 : 8); i++) colors.push('blue');
   for (let i = 0; i < 7; i++) colors.push('neutral');
   colors.push('assassin');
   const shuffledColors = shuffle(colors);
-  return words.map((w, i) => ({ word: w, color: shuffledColors[i], revealed: false }));
+  
+  return chosenIndices.map((idx, i) => ({
+    wordAr: AR_WORDS[idx],
+    wordEn: EN_WORDS[idx],
+    color: shuffledColors[i],
+    revealed: false
+  }));
 }
 
 function freshRoom(code, lang) {
@@ -103,7 +107,8 @@ function roomPublicPlayers(room) {
 function boardFor(room, slot) {
   const isSpymaster = slot === 'red-spymaster' || slot === 'blue-spymaster';
   return room.board.map((c) => ({
-    word: c.word,
+    wordAr: c.wordAr,
+    wordEn: c.wordEn,
     revealed: c.revealed,
     color: (c.revealed || isSpymaster) ? c.color : null,
   }));
@@ -201,7 +206,7 @@ io.on('connection', (socket) => {
     room.currentTeam = room.startTeam;
     room.redRemaining = room.startTeam === 'red' ? 9 : 8;
     room.blueRemaining = room.startTeam === 'blue' ? 9 : 8;
-    room.board = newBoard(room.lang, room.startTeam);
+    room.board = newBoard(room.startTeam);
     room.clue = null;
     room.guessesLeft = 0;
     room.clueSubmitted = false;
@@ -239,16 +244,17 @@ io.on('connection', (socket) => {
     if (!cell || cell.revealed) return;
 
     cell.revealed = true;
+    const activeWord = room.lang === 'ar' ? cell.wordAr : cell.wordEn;
 
     if (cell.color === 'assassin') {
-      addLog(room, room.currentTeam, `assassin:${cell.word}`);
+      addLog(room, room.currentTeam, `assassin:${activeWord}`);
       endGame(room, room.currentTeam === 'red' ? 'blue' : 'red', 'assassin');
       return broadcast(room);
     }
 
     if (cell.color === room.currentTeam) {
       if (room.currentTeam === 'red') room.redRemaining--; else room.blueRemaining--;
-      addLog(room, room.currentTeam, `hit:${cell.word}`);
+      addLog(room, room.currentTeam, `hit:${activeWord}`);
       room.guessesLeft = room.guessesLeft === Infinity ? Infinity : room.guessesLeft - 1;
       if ((room.currentTeam === 'red' && room.redRemaining <= 0) || (room.currentTeam === 'blue' && room.blueRemaining <= 0)) {
         endGame(room, room.currentTeam, 'complete');
@@ -259,12 +265,12 @@ io.on('connection', (socket) => {
         switchTurn(room);
       }
     } else if (cell.color === 'neutral') {
-      addLog(room, room.currentTeam, `neutral:${cell.word}`);
+      addLog(room, room.currentTeam, `neutral:${activeWord}`);
       switchTurn(room);
     } else {
       const opp = cell.color;
       if (opp === 'red') room.redRemaining--; else room.blueRemaining--;
-      addLog(room, room.currentTeam, `wrong_team:${cell.word}`);
+      addLog(room, room.currentTeam, `wrong_team:${activeWord}`);
       if ((opp === 'red' && room.redRemaining <= 0) || (opp === 'blue' && room.blueRemaining <= 0)) {
         endGame(room, opp, 'complete');
         return broadcast(room);
